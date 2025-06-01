@@ -1,0 +1,82 @@
+PROJE ADI CommonLit Student Summary Scorer (Kaggle NLP Projesi)
+
+PROJE AMACI
+Bu proje, öğrencilerin yazdığı özetlerin kalitesini otomatik olarak puanlayan bir NLP (Doğal Dil İşleme) sistemidir. Kaggle'da düzenlenen CommonLit Evaluate Student Summaries yarışması temel alınmıştır.
+
+Yarışma Linki httpswww.kaggle.comcompetitionscommonlit-evaluate-student-summaries
+
+---
+
+KULLANILAN VERİ
+- summaries_train.csv → Eğitim verisi (öğrenci özetleri + puanlar)
+- summaries_test.csv → Tahmin yapılacak özetler
+- sample_submission.csv → Tahmin formatı için örnek
+- prompts_train.csv  prompts_test.csv → Ek açıklama verisi (proje için kullanılmadı)
+
+---
+
+HEDEF DEĞİŞKENLER
+- content → Özetin içerik yeterliliği (0–5 arası)
+- wording → Özetin dil kullanımı ve netliği (0–5 arası)
+
+---
+
+UYGULANAN ADIMLAR
+
+1. CSV VERİSİNİN İNCELENMESİ
+   - summaries_train.csv dosyası yüklendi
+   - `text`, `content`, `wording` sütunları analiz edildi
+
+2. METİN İŞLEME VE MODELLEME
+   - TF-IDF vektörleştirici ile metin sayısallaştırıldı
+   - Ridge Regression modeli kullanıldı
+   - MultiOutputRegressor ile aynı anda 2 hedef değişken tahmin edildi
+   - Ortalama RMSE (doğrulama hatası) 0.6819
+
+3. TAHMİN VE KAGGLE SUBMISSION
+   - summaries_test.csv üzerindeki özetler tahmin edildi
+   - Tahmin sonuçları sample_submission.csv formatına göre yazıldı
+   - submission.csv dosyası oluşturuldu
+
+4. STREAMLIT UYGULAMASI (app.py)
+   - Kullanıcıdan özet alınarak anlık tahmin yapılmasını sağlayan arayüz geliştirildi
+   - Model ve TF-IDF, joblib ile .pkl dosyası olarak kaydedildi
+   - Hugging Face Spaces’e canlı olarak yüklendi
+
+---
+
+TEST CÜMLESİ ÖRNEKLERİ
+
+[Zayıf Özet]
+It was about a story. It was good. The people were talking and then something happened.  
+Beklenen skor Content ~1.0, Wording ~1.0
+
+[Orta Seviye]
+The article discusses the importance of environmental protection. It explains how pollution harms the earth and suggests ways to stop it.  
+Beklenen skor Content ~3.0, Wording ~3.0
+
+[Gelişmiş Akademik Özet]
+The summary articulates the author’s argument that environmental degradation is a result of unchecked industrial expansion. It effectively highlights key solutions such as policy reform, corporate accountability, and individual action to mitigate ecological damage.  
+Beklenen skor Content ~4.5, Wording ~4.5
+
+---
+
+KULLANILAN KÜTÜPHANELER
+- pandas
+- numpy
+- scikit-learn
+- joblib
+- streamlit
+
+---
+
+UYGULAMA KULLANIMI
+1. `streamlit run app.py` komutu ile yerel test yapılabilir.
+2. Hugging Face Spaces üzerinden herkese açık olarak erişilebilir.
+3. Model ridge_model.pkl  TF-IDF tfidf_vectorizer.pkl
+
+---
+
+TAMAMLAYAN [Hande Çarkcı]  
+
+PROJE NO 2  20  

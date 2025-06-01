@@ -1,0 +1,83 @@
+PROJECT TITLE: CommonLit Student Summary Scorer (Kaggle NLP Project)
+
+OBJECTIVE:
+This project is an NLP-based scoring system that automatically evaluates the quality of student-written summaries. It is based on the Kaggle competition "CommonLit Evaluate Student Summaries."
+
+Kaggle Link: https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries
+
+---
+
+DATA USED:
+- summaries_train.csv → Training data (student summaries + scores)
+- summaries_test.csv → Summaries to be scored
+- sample_submission.csv → Sample submission format
+- prompts_train.csv / prompts_test.csv → Additional metadata (not used in this project)
+
+---
+
+TARGET VARIABLES:
+- content → Measures how well the summary captures the main idea (0–5 scale)
+- wording → Measures clarity and expression quality (0–5 scale)
+
+---
+
+STEPS IMPLEMENTED:
+
+1. DATA EXPLORATION
+   - Loaded and analyzed `summaries_train.csv`
+   - Focused on `text`, `content`, and `wording` columns
+
+2. TEXT PROCESSING & MODELING
+   - Used `TfidfVectorizer` to convert text into numerical features
+   - Applied Ridge Regression inside a `MultiOutputRegressor`
+   - Model trained to predict both scores simultaneously
+   - Validation RMSE: **0.6819**
+
+3. PREDICTION & KAGGLE SUBMISSION
+   - Generated predictions on `summaries_test.csv`
+   - Filled predictions into the `sample_submission.csv` structure
+   - Created `submission.csv` for competition upload
+
+4. STREAMLIT WEB APP (`app.py`)
+   - Developed a user-friendly web interface to input any summary
+   - Displays instant predictions for `content` and `wording` scores
+   - Exported model and vectorizer as `.pkl` files using `joblib`
+   - Deployed publicly using Hugging Face Spaces
+
+---
+
+TEST EXAMPLES:
+
+[Weak Summary]
+It was about a story. It was good. The people were talking and then something happened.  
+Expected Score: Content ≈ 1.0, Wording ≈ 1.0
+
+[Intermediate Summary]
+The article discusses the importance of environmental protection. It explains how pollution harms the earth and suggests ways to stop it.  
+Expected Score: Content ≈ 3.0, Wording ≈ 3.0
+
+[Advanced Summary]
+The summary articulates the author’s argument that environmental degradation is a result of unchecked industrial expansion. It effectively highlights key solutions such as policy reform, corporate accountability, and individual action to mitigate ecological damage.  
+Expected Score: Content ≈ 4.5, Wording ≈ 4.5
+
+---
+
+LIBRARIES USED:
+- pandas
+- numpy
+- scikit-learn
+- joblib
+- streamlit
+
+---
+
+HOW TO RUN:
+1. Use `streamlit run app.py` for local testing
+2. Alternatively, access the deployed version via Hugging Face Spaces
+3. Model files: `ridge_model.pkl`, `tfidf_vectorizer.pkl`
+
+---
+
+CREATED BY: [Hande Çarkcı]  
+DATE: [June 1, 2025]  
+PROJECT #: 2 of 20
